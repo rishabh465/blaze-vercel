@@ -34,6 +34,20 @@ app.use("/api/users", userRoutes);
 app.use("/api/posts", postRoutes);
 app.use("/api/notifications", notificationRoutes);
 
+// Error handling middleware
+app.use((err, req, res, next) => {
+	console.error(err.stack);
+	res.status(500).json({ 
+		error: "Internal Server Error",
+		message: process.env.NODE_ENV === "development" ? err.message : undefined
+	});
+});
+
+// 404 handler
+app.use((req, res) => {
+	res.status(404).json({ error: "Not Found" });
+});
+
 if (process.env.NODE_ENV === "production") {
 	app.use(express.static(path.join(__dirname, "/frontend/dist")));
 
