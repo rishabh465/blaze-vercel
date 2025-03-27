@@ -1,9 +1,6 @@
-const API_BASE_URL = import.meta.env.VITE_API_URL || '';
-
 export const api = {
     async fetch(endpoint, options = {}) {
-        const url = `${API_BASE_URL}${endpoint}`;
-        const response = await fetch(url, {
+        const response = await fetch(endpoint, {
             ...options,
             credentials: 'include',
             headers: {
