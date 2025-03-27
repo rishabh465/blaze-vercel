@@ -27,8 +27,8 @@ const __dirname = path.resolve();
 // CORS configuration
 app.use(cors({
     origin: process.env.NODE_ENV === "production" 
-        ? [process.env.FRONTEND_URL, "https://*.vercel.app"]
-        : "http://localhost:5173",
+        ? [process.env.FRONTEND_URL] 
+        : "http://localhost:3000",
     credentials: true
 }));
 
@@ -57,21 +57,15 @@ app.use((req, res) => {
 	res.status(404).json({ error: "Not Found" });
 });
 
-// For Vercel deployment
 if (process.env.NODE_ENV === "production") {
-    app.use(express.static(path.join(__dirname, "../frontend/dist")));
-    
-    app.get("*", (req, res) => {
-        res.sendFile(path.join(__dirname, "../frontend/dist/index.html"));
-    });
+	app.use(express.static(path.join(__dirname, "/frontend/dist")));
+
+	app.get("*", (req, res) => {
+		res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"));
+	});
 }
 
-// Only start the server if we're not in a serverless environment
-if (process.env.NODE_ENV !== "production") {
-    app.listen(PORT, () => {
-        console.log(`Server is running on port ${PORT}`);
-        connectMongoDB();
-    });
-}
-
-export default app;
+app.listen(PORT, () => {
+	console.log(`Server is running on port ${PORT}`);
+	connectMongoDB();
+});
