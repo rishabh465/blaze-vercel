@@ -10,24 +10,22 @@ export const api = {
                 },
             });
 
-            // First check if the response is ok
+            const contentType = response.headers.get('content-type');
+            const isJson = contentType && contentType.includes('application/json');
+
             if (!response.ok) {
-                // Try to parse as JSON first
-                try {
+                if (isJson) {
                     const errorData = await response.json();
                     throw new Error(errorData.error || 'Something went wrong');
-                } catch (e) {
-                    // If JSON parsing fails, get the text response
+                } else {
                     const textError = await response.text();
                     throw new Error(textError || 'Something went wrong');
                 }
             }
 
-            // For successful responses, try to parse as JSON
-            try {
+            if (isJson) {
                 return await response.json();
-            } catch (e) {
-                // If JSON parsing fails, return the text response
+            } else {
                 return await response.text();
             }
         } catch (error) {
