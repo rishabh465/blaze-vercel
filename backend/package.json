@@ -2,10 +2,11 @@
   "name": "blaze-backend",
   "version": "1.0.0",
   "type": "module",
-  "main": "server.js",
+  "main": "api/route.js",
   "scripts": {
-    "start": "node server.js",
-    "dev": "nodemon server.js"
+    "start": "node api/route.js",
+    "dev": "nodemon api/route.js",
+    "vercel-build": "echo 'Build step completed'"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
